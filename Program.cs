@@ -1,5 +1,7 @@
 ﻿using Cookie_Cookbook.UserInteraction;
 
-UserInteraction userInteraction = new();
+Printer userInteraction = new();
 
-userInteraction.ShowInstructions();
+userInteraction.PrintInstructions();
+
+
