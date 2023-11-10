@@ -1,4 +1,6 @@
+using System.Runtime.CompilerServices;
 using Cookie_Cookbook.CookRecipe;
+using Cookie_Cookbook.File;
 
 namespace Cookie_Cookbook.UserInteraction
 {
@@ -9,8 +11,10 @@ namespace Cookie_Cookbook.UserInteraction
       Message message = new();
       Recipe recipe = new();
       Ingredient ingredient = new();
+      FileHandler fileHandler = new();
 
       bool keepAddingIngredients = true;
+      List<string> recipeIds = new();
 
       message.PrintInstructions();
 
@@ -28,6 +32,7 @@ namespace Cookie_Cookbook.UserInteraction
             if (ingredient.IsIdInTheList(ingredientId))
             {
               recipe.Add(ingredientId);
+              recipeIds.Add(ingredientId.ToString());
             }
           }
           else
@@ -38,6 +43,7 @@ namespace Cookie_Cookbook.UserInteraction
       }
 
       message.PrintAddedIngredients(recipe.GetAddedIngredients());
+      fileHandler.GenerateOrWriteTxt("recipe.txt", string.Join(",", recipeIds));
     }
   }
 }

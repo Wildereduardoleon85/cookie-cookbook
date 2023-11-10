@@ -30,7 +30,7 @@ namespace Cookie_Cookbook.CookRecipe
         }
         else
         {
-          builder.Append($"{sentence}\n");
+          builder.Append(sentence + Environment.NewLine);
         }
       }
 
