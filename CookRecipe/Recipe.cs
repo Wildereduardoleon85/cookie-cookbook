@@ -6,6 +6,7 @@ namespace Cookie_Cookbook.CookRecipe
   public class Recipe
   {
     readonly List<BaseIngredient> _recipeItems = new();
+    
     public void Add(int ingredientId)
     {
       foreach (var item in new Ingredient().List)
@@ -16,6 +17,7 @@ namespace Cookie_Cookbook.CookRecipe
         }
       }
     }
+
     public string GetAddedIngredients()
     {
       StringBuilder builder = new();

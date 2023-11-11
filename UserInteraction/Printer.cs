@@ -2,7 +2,7 @@ using Cookie_Cookbook.CookRecipe;
 
 namespace Cookie_Cookbook.UserInteraction
 {
-  public class Message
+  public class Printer
   {
     private readonly string _initialInstruction = "Create a new cookie recipe! Available ingredients are:";
     private readonly string _addIngredientMessage = "Add an ingredient by it's Id or type anything else if finish.";
@@ -26,6 +26,19 @@ namespace Cookie_Cookbook.UserInteraction
     {
       Console.WriteLine("Recipe Added:");
       Console.WriteLine(addedIngredients);
+    }
+
+    public void PrintOrderedRecipe(List<int> recipeIds, int orderNumber)
+    {
+      Recipe recipe = new();
+
+      foreach (var id in recipeIds)
+      {
+        recipe.Add(id);
+      }
+
+      Console.WriteLine($"**** {orderNumber} ****");
+      Console.WriteLine(recipe.GetAddedIngredients() + Environment.NewLine);
     }
   }
 }
