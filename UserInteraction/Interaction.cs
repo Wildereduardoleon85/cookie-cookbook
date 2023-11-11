@@ -1,6 +1,6 @@
 using Cookie_Cookbook.Conf;
 using Cookie_Cookbook.CookRecipe;
-using Cookie_Cookbook.File;
+using Cookie_Cookbook.FileHandler;
 
 namespace Cookie_Cookbook.UserInteraction
 {
@@ -11,7 +11,7 @@ namespace Cookie_Cookbook.UserInteraction
       Printer printer = new();
       Recipe recipe = new();
       Ingredient ingredient = new();
-      FileHandler fileHandler = new();
+      Writer writer = new();
 
       bool keepAddingIngredients = true;
       List<string> recipeIds = new();
@@ -43,7 +43,7 @@ namespace Cookie_Cookbook.UserInteraction
       }
 
       printer.PrintAddedIngredients(recipe.GetAddedIngredients());
-      fileHandler.GenerateOrWriteTxt(new FileConf().Name, string.Join(",", recipeIds));
+      writer.WriteOrGenerateFile(string.Join(",", recipeIds), new FileConf().Format);
     }
   }
 }

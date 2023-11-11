@@ -25,5 +25,15 @@ namespace Cookie_Cookbook.Helpers
 
       return isValid;
     }
+
+    public List<string> ConvertStringIntoList(string input)
+    {
+      List<string> convertedInput = new()
+      {
+          input
+      };
+
+      return convertedInput;
+    }
   }
 }
