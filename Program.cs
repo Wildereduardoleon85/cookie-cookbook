@@ -1,10 +1,5 @@
 ﻿using Cookie_Cookbook.UserInteraction;
-using Cookie_Cookbook.FileHandler;
 
-new Reader().ReadRecipeFromFile();
+new Printer().PrintExistingRecipes();
 
-Interaction interaction = new();
-
-interaction.Start();
-
-
+new Interaction().Start();

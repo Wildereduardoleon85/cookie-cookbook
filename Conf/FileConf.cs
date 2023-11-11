@@ -5,7 +5,7 @@ namespace Cookie_Cookbook.Conf
     public class FileConf
     {
         public string Name { get; } = "recipe";
-        public FileFormat Format { get; } = FileFormat.Json;
+        public FileFormat Format { get; } = FileFormat.Txt;
 
         public string GetFilePath()
         {

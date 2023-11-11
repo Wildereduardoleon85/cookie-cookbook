@@ -1,62 +1,45 @@
 using System.Text.Json;
-using Cookie_Cookbook.Conf;
-using Cookie_Cookbook.Enums;
 using Cookie_Cookbook.Helpers;
-using Cookie_Cookbook.UserInteraction;
 
 namespace Cookie_Cookbook.FileHandler
 {
   public class Reader
   {
-    public void ReadRecipeFromFile()
+    public string Path { get; }
+
+    public Reader(string path)
     {
-      FileConf conf = new();
-      string path = conf.GetFilePath();
+      Path = path;
+    }
+    public bool ReadRecipeFromFile(out List<string> recipes)
+    {
+      bool doesTheFileExists = true;
 
-      if (File.Exists(path))
+      if (File.Exists(Path))
       {
-        StreamReader reader = new(path);
-        string content = reader.ReadToEnd();
-        string[] listOfRecipes = content.Split(Environment.NewLine);
+        FileHelper helper = new();
+        string content = File.ReadAllText(Path);
+        List<string> listOfRecipes = content.Split(Environment.NewLine).ToList();
 
-        if (conf.Format == FileFormat.Json)
+        if (helper.GetFileExtension(Path) == "json")
         {
-          var deserializedData = JsonSerializer.Deserialize<string[]>(content);
+          var deserializedData = JsonSerializer.Deserialize<List<string>>(content);
           if (deserializedData is not null)
           {
             listOfRecipes = deserializedData;
           }
         }
 
-        List<List<int>> myList = new();
-        Parser parser = new();
-        Printer printer = new();
-
-        foreach (var recipe in listOfRecipes)
-        {
-          if (recipe.Trim() != "")
-          {
-            bool successParsing = parser.TryParseIngredientsIds(
-              recipe,
-              out List<int> parsedList
-            );
-
-            if (successParsing)
-            {
-              myList.Add(parsedList);
-            }
-          }
-        }
-
-        Console.WriteLine("Existing recipes are:" + Environment.NewLine);
-
-        for (int i = 0; i < myList.Count; i++)
-        {
-          printer.PrintOrderedRecipe(myList[i], i + 1);
-        }
-
-        reader.Close();
+        recipes = listOfRecipes;
       }
+      else
+      {
+        recipes = new List<string> { "" };
+        doesTheFileExists = false;
+      }
+
+      return doesTheFileExists;
     }
   }
 }
+
