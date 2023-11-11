@@ -11,7 +11,7 @@ namespace Cookie_Cookbook.UserInteraction
       Printer printer = new();
       Recipe recipe = new();
       Ingredient ingredient = new();
-      Writer writer = new();
+      string path = new FileConf().GetFilePath();
 
       bool keepAddingIngredients = true;
       List<string> recipeIds = new();
@@ -42,8 +42,10 @@ namespace Cookie_Cookbook.UserInteraction
         }
       }
 
+      Writer writer = new(string.Join(",", recipeIds), path);
+
       printer.PrintAddedIngredients(recipe.GetAddedIngredients());
-      writer.WriteOrGenerateFile(string.Join(",", recipeIds), new FileConf().Format);
+      writer.WriteOrGenerateFile();
     }
   }
 }

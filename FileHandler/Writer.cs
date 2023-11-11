@@ -1,46 +1,63 @@
 using System.Text.Json;
-using Cookie_Cookbook.Conf;
-using Cookie_Cookbook.Enums;
 using Cookie_Cookbook.Helpers;
 
 namespace Cookie_Cookbook.FileHandler
 {
   public class Writer
   {
-    public void WriteOrGenerateFile(string content, FileFormat fileFormat)
+    public string Content { get; }
+    public string Path { get; }
+
+    public Writer(string content, string path)
     {
-      string path = new FileConf().GetFilePath();
-      Parser parser = new();
-      string jsonString = JsonSerializer.Serialize(parser.ConvertStringIntoList(content), new JsonSerializerOptions { WriteIndented = true });
+      Content = content;
+      Path = path;
+    }
+    public void WriteOrGenerateFile()
+    {
+      FileHelper helper = new();
 
-      if (fileFormat == FileFormat.Txt)
+      if (helper.GetFileExtension(Path) == "txt")
       {
-        StreamWriter writer = new(path, true);
-
-        writer.WriteLine(content);
-        writer.Close();
+        WriteToTextFile();
       }
       else
       {
-        if (File.Exists(path))
-        {
-          StreamReader reader = new(path);
-          string jsonContent = reader.ReadToEnd();
-          reader.Close();
-          var deserializedData = JsonSerializer.Deserialize<List<string>>(jsonContent);
+        WriteToJsonFile();
+      }
+    }
 
-          if (deserializedData is not null)
-          {
-            deserializedData.Add(content);
-            string newJsonString = JsonSerializer.Serialize(deserializedData, new JsonSerializerOptions { WriteIndented = true });
-            File.WriteAllText(path, newJsonString);
-          }
-        }
-        else
+    protected void WriteToTextFile()
+    {
+      StreamWriter writer = new(Path, true);
+
+      writer.WriteLine(Content);
+      writer.Close();
+    }
+
+    protected void WriteToJsonFile()
+    {
+      Parser parser = new();
+      List<string> jsonData = parser.ConvertStringIntoList(Content);
+
+      if (File.Exists(Path))
+      {
+        string jsonContent = File.ReadAllText(Path);
+        var deserializedData = JsonSerializer.Deserialize<List<string>>(jsonContent);
+
+        if (deserializedData is not null)
         {
-          File.WriteAllText(path, jsonString);
+          deserializedData.Add(Content);
+          jsonData = deserializedData;
         }
       }
+
+      string jsonString = JsonSerializer.Serialize(
+        jsonData,
+        new JsonSerializerOptions { WriteIndented = true }
+      );
+
+      File.WriteAllText(Path, jsonString);
     }
   }
 }
